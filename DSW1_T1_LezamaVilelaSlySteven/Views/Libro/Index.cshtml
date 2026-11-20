@@ -1,0 +1,74 @@
+@model IEnumerable<DSW1_T1_LezamaVilelaSlySteven.Models.Libro>
+
+@{
+    ViewData["Title"] = "Mantenimiento de Libros";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold text-primary mb-0">Listado de Libros</h2>
+    <a asp-action="Crear" class="btn btn-primary fw-semibold shadow-sm">+ Nuevo Libro</a>
+</div>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success shadow-sm">@TempData["Mensaje"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger shadow-sm">@TempData["Error"]</div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0 bg-white">
+                <thead style="background-color: #0d47a1; color: #ffffff;">
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                        <th>Categoría</th>
+                        <th>ISBN</th>
+                        <th class="text-center">Año</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-primary">@item.CodLibro</td>
+                            <td>@item.Titulo</td>
+                            <td>
+                                <span class="badge bg-info text-dark">@item.NombreCategoria</span>
+                            </td>
+                            <td>@item.ISBN</td>
+                            <td class="text-center">@item.AnioPublicacion</td>
+                            <td class="text-center fw-semibold">@item.Stock</td>
+                            <td class="text-center">
+                                @if (item.Estado == 1)
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                }
+                            </td>
+                            <td class="text-center text-nowrap">
+                                <a asp-action="Editar" asp-route-id="@item.CodLibro.Trim()" class="btn btn-warning btn-sm fw-semibold">Editar</a>
+
+                                <form asp-action="Eliminar" asp-route-id="@item.CodLibro.Trim()" method="post" style="display:inline;"
+                                      onsubmit="return confirm('¿Está seguro de eliminar el libro @item.Titulo?');">
+                                    <button type="submit" class="btn btn-danger btn-sm fw-semibold">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

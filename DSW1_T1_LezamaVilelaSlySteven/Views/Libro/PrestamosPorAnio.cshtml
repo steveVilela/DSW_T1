@@ -1,0 +1,69 @@
+@model IEnumerable<DSW1_T1_LezamaVilelaSlySteven.Models.PrestamoAnio>
+
+@{
+    ViewData["Title"] = "Préstamos por Año";
+}
+
+<h2>Consulta de Préstamos por Año</h2>
+
+<form asp-action="PrestamosPorAnio" asp-controller="Libro" method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <label class="col-form-label"><strong>Año de Préstamo:</strong></label>
+    </div>
+    <div class="col-auto">
+        @Html.TextBox("anio", (int)ViewBag.anio, new { @type = "number", @class = "form-control", min = "1900", max = "2100" })
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Consultar</button>
+    </div>
+</form>
+
+<p><strong>Total de préstamos encontrados:</strong> @ViewBag.total</p>
+
+@if ((int)ViewBag.total > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Préstamo</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Devolución</th>
+                <th>Estudiante</th>
+                <th>Libro</th>
+                <th>Estado</th>
+                <th>Multa (S/)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.IdPrestamo</td>
+                    <td>@item.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                    <td>@(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "Pendiente")</td>
+                    <td>@item.ApellidosNombres</td>
+                    <td>@item.Titulo</td>
+                    <td>@item.EstadoPrestamo</td>
+                    <td>@item.Multa.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Controles de paginación (solo visibles cuando existen registros) -->
+    <div>
+        @for (int i = 0; i < (int)ViewBag.pags; i++)
+        {
+            <a asp-action="PrestamosPorAnio"
+               asp-route-anio="@ViewBag.anio"
+               asp-route-p="@i"
+               class="@(i == (int)ViewBag.p ? "btn btn-success" : "btn btn-primary")">@(i + 1)</a>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        No se encontraron préstamos registrados para el año <strong>@ViewBag.anio</strong>.
+    </div>
+}

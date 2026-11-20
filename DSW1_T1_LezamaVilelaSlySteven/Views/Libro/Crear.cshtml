@@ -1,0 +1,65 @@
+@model DSW1_T1_LezamaVilelaSlySteven.Models.Libro
+
+@{
+    ViewData["Title"] = "Registrar Libro";
+}
+
+<h2>Registrar Nuevo Libro</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="Crear" method="post" class="col-md-6">
+    <div class="mb-3">
+        <label asp-for="CodLibro" class="form-label"></label>
+        <input asp-for="CodLibro" class="form-control" maxlength="6" placeholder="Ej: LIB001" />
+        <span asp-validation-for="CodLibro" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CodCategoria" class="form-label"></label>
+        @Html.DropDownListFor(m => m.CodCategoria, (SelectList)ViewBag.categorias, "-- Seleccione Categoría --", new { @class = "form-select" })
+        <span asp-validation-for="CodCategoria" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Titulo" class="form-label"></label>
+        <input asp-for="Titulo" class="form-control" />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ISBN" class="form-label"></label>
+        <input asp-for="ISBN" class="form-control" />
+        <span asp-validation-for="ISBN" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AnioPublicacion" class="form-label"></label>
+        <input asp-for="AnioPublicacion" type="number" class="form-control" />
+        <span asp-validation-for="AnioPublicacion" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label"></label>
+        <input asp-for="Stock" type="number" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Estado" class="form-label"></label>
+        <select asp-for="Estado" class="form-select">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
